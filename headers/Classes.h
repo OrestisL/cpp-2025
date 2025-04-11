@@ -46,6 +46,16 @@ namespace classes
 		void InitArrays();
 	};
 
+
+	class Object
+	{
+		Transform* transform;
+		// ...
+	public:
+		inline Object(Transform*& other) { transform = other; }
+
+
+	};
 }
 
 #endif // !CLASSES_H

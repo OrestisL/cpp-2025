@@ -2,6 +2,7 @@
 #include <vector>
 #include "Classes.h"
 
+
 void ShowArray(float* array, int size)
 {
 	for (size_t i = 0; i < size; i++)
@@ -22,7 +23,7 @@ int size{ };
 float* array;
 std::vector<float> floatvector;
 
-void Arrays() 
+void Arrays()
 {
 	while (size <= 0)
 	{
@@ -57,6 +58,8 @@ int main()
 	std::cout << name << std::endl;
 
 	classes::Transform* t = new classes::Transform(10000);
+
+	classes::Object* ob = new classes::Object(t);
 
 	std::cout << t->GetPosition(1000);
 }
