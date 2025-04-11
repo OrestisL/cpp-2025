@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <vector>
+#include "Classes.h"
 
 void ShowArray(float* array, int size)
 {
@@ -21,9 +22,9 @@ int size{ };
 float* array;
 std::vector<float> floatvector;
 
-int main()
+void Arrays() 
 {
-	while (size <= 0) 
+	while (size <= 0)
 	{
 		std::cout << "Please enter an integer for the array size: ";
 		std::cin >> size;
@@ -43,4 +44,19 @@ int main()
 
 	ShowArray(array, size);
 	ShowVector(floatvector);
+}
+
+int main()
+{
+	classes::Person JohnSmith{};
+	classes::Person p("test", "test2", 5);
+
+	std::string name;
+	p.GetName(&name);
+
+	std::cout << name << std::endl;
+
+	classes::Transform* t = new classes::Transform(10000);
+
+	std::cout << t->GetPosition(1000);
 }
