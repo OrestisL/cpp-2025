@@ -1,7 +1,8 @@
 ﻿#include <iostream>
 #include <vector>
 #include "Classes.h"
-
+#include "Files.h"
+#include <cmath>
 
 void ShowArray(float* array, int size)
 {
@@ -11,17 +12,58 @@ void ShowArray(float* array, int size)
 	}
 }
 
+std::string PrintArray(std::vector<float> v)
+{
+	std::string result;
+	for (size_t i = 0; i < v.size(); i++)
+	{
+		result += std::to_string(i) + ", " + std::to_string(v[i]) + "\n";
+	}
+	return result;
+}
+
 void ShowVector(std::vector<float> v)
 {
 	for (size_t i = 0; i < v.size(); i++)
 	{
-		std::cout << i << " : " << v[i] << "\n";
+		std::cout << i << " , " << v[i] << "\n";
 	}
+}
+
+std::vector<classes::Position> PositionInsideCircle(classes::Position center, float radius, size_t numberPoints = 120) 
+{
+	float theta;
+	std::vector<classes::Position> positions;
+
+	for (size_t i = 0; i < numberPoints; i++)
+	{
+		theta = (float)i * 3.14159 / 180; // radians
+		float x = center.x + cos(theta);
+		float y = center.y + sin(theta);
+		float z = 5;
+
+		positions.push_back(classes::Position(x, y, z));
+	}
+
+	return positions;
+}
+
+void PrintPositionArray(std::vector<classes::Position> positions)
+{
+	std::string result;
+	for (size_t i = 0; i < positions.size(); i++)
+	{
+		classes::Position pos = positions[i];
+		result += std::to_string(pos.x) + ", " + std::to_string(pos.y) + ", " + std::to_string(pos.z) + "\n";
+	}
+
+	std::cout << result;
 }
 
 int size{ };
 float* array;
 std::vector<float> floatvector;
+std::vector<classes::Position> posVec;
 
 void Arrays()
 {
@@ -49,17 +91,44 @@ void Arrays()
 
 int main()
 {
-	classes::Person JohnSmith{};
-	classes::Person p("test", "test2", 5);
+	// create posVec and write it to a file
+	//posVec = PositionInsideCircle(classes::Position(0, 0, 0), 4);
+	//
+	//std::string positionsString;
+	//for (size_t i = 0; i < posVec.size(); i++)
+	//{
+	//	positionsString += posVec[i].ToString() + "\n";
+	//}
+	//
+	//Files::WriteFile("Positions.txt", positionsString);
 
-	std::string name;
-	p.GetName(&name);
+	// read posVec from file
+	//Files::ReadPositionArrayFromFile("Positions.txt", posVec);
+	//PrintPositionArray(posVec);
 
-	std::cout << name << std::endl;
+	// polymorphism
+	// pointers to classes::Base because
+	// the derived classes may not have the same size as Base
+	// but pointers to Base will have the same size as pointers
+	// to derived classes
+	std::vector<classes::Base*> v;
+	for (size_t i = 0; i < 10; i++)
+	{
+		if (i % 2 == 0)
+		{
+			v.push_back(new classes::Derived());
+		}
+		else
+		{
+			v.push_back(new classes::Derived2());
+		}
+	}
 
-	classes::Transform* t = new classes::Transform(10000);
+	for (size_t i = 0; i < 10; i++)
+	{
+		v[i]->F();
+	}
 
-	classes::Object* ob = new classes::Object(t);
-
-	std::cout << t->GetPosition(1000);
+	std::cout << classes::Base::GetCount();
 }
+

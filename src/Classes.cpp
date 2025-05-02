@@ -1,5 +1,6 @@
 #include "Classes.h"
 #include <random>
+#include <iostream>
 
 namespace classes 
 {
@@ -72,4 +73,23 @@ namespace classes
 		return scales[index];
 	}
 #pragma endregion
+
+	void Base::F() 
+	{
+		std::cout << "F from Base\n";
+	}
+
+	void Derived::F() 
+	{
+		int x = 5;
+		x += 18203;
+		std::cout << std::to_string(x) << "\n";
+	}
+
+	void Derived2::F()
+	{
+		std::cout << "F from derived2\n";
+	}
+
+	int Base::count = 0;
 }

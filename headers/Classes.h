@@ -46,7 +46,6 @@ namespace classes
 		void InitArrays();
 	};
 
-
 	class Object
 	{
 		Transform* transform;
@@ -55,6 +54,46 @@ namespace classes
 		inline Object(Transform*& other) { transform = other; }
 
 
+	};
+
+	struct Position
+	{
+		float x, y, z;
+
+		Position(float xIn, float yIn, float zIn)
+		{
+			x = xIn;
+			y = yIn;
+			z = zIn;
+		}
+
+		std::string ToString() 
+		{
+			return std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z);
+		}
+	};
+
+	class Base
+	{
+	private:
+		static int count;
+
+	public:
+		inline static int GetCount() { return count; }
+		Base() { count++; }
+		virtual void F();
+	};
+
+	class Derived : public Base
+	{
+	public:
+		void F() override;
+	};
+
+	class Derived2 : public Base
+	{
+	public:
+		void F() override;
 	};
 }
 
