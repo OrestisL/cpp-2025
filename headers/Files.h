@@ -1,5 +1,4 @@
-#ifndef FILES_H
-#define FILES_H
+#pragma once
 
 #include <iostream>
 #include <fstream>
@@ -93,6 +92,80 @@ namespace Files
 		stream.write(contents.c_str(), contents.size());
 		return true;
 	}
+
+	bool ReadSectionsFile(const std::string& path, int id, std::vector<classes::Position>& section)
+	{
+		std::ifstream stream(path, std::ios::in);
+		if (!stream.is_open())
+		{
+			return false;
+		}
+
+		std::string line;
+		while (std::getline(stream, line))
+		{
+			if (line.find("#Section") != std::string::npos)
+			{
+				std::istringstream stringStream(line);
+				std::string sectionString;
+				std::string readId;
+				stringStream >> sectionString >> readId;
+
+				// didnt find the requested section
+				if (std::stoi(readId) != id)
+					continue;
+
+				// read all points
+				while (std::getline(stream, line))
+				{
+					std::istringstream stringStream(line);
+					if (line.find("#Section") != std::string::npos)
+						break;
+					
+					std::string x, y, z;
+
+					// read from string stream into index and value
+					stringStream >> x >> y >> z;
+
+					float posx = stof(x);
+					float posy = stof(y);
+					float posz = stof(z);
+
+					section.push_back(classes::Position(posx, posy, posz));
+				}
+				break;
+			}
+		}
+	}
+
+	bool ReadAllSectionsFromFile(const std::string& path, std::vector<classes::Position>& section)
+	{
+		std::ifstream stream(path, std::ios::in);
+		if (!stream.is_open())
+		{
+			std::cerr << "Could not open file " + path;
+			return false;
+		}
+
+		std::string line;
+		while (std::getline(stream, line))
+		{
+			if (line.find("#Section") != std::string::npos)
+				continue;
+
+			std::istringstream stringStream(line);
+			std::string x, y, z;
+
+			// read from string stream into index and value
+			stringStream >> x >> y >> z; 
+
+			float posx = stof(x);
+			float posy = stof(y);
+			float posz = stof(z);
+
+			section.push_back(classes::Position(posx, posy, posz));
+		}
+
+	}
 }
 
-#endif // !FILES_H

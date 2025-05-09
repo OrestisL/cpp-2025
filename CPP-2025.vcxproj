@@ -22,6 +22,7 @@
     <ClInclude Include="headers\Classes.h" />
     <ClInclude Include="headers\Files.h" />
     <ClInclude Include="headers\Sample.h" />
+    <ClInclude Include="headers\SectionMath.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Classes.cpp" />

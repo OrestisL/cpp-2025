@@ -1,5 +1,5 @@
-#ifndef CLASSES_H
-#define CLASSES_H
+#pragma once
+
 #include <string>
 #include <vector>
 
@@ -67,7 +67,7 @@ namespace classes
 			z = zIn;
 		}
 
-		std::string ToString() 
+		std::string ToString() const
 		{
 			return std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z);
 		}
@@ -81,6 +81,7 @@ namespace classes
 	public:
 		inline static int GetCount() { return count; }
 		Base() { count++; }
+		~Base() { count--; }
 		virtual void F();
 	};
 
@@ -95,6 +96,5 @@ namespace classes
 	public:
 		void F() override;
 	};
-}
 
-#endif // !CLASSES_H
+}

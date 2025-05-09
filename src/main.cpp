@@ -3,6 +3,7 @@
 #include "Classes.h"
 #include "Files.h"
 #include <cmath>
+#include "SectionMath.h"
 
 void ShowArray(float* array, int size)
 {
@@ -30,17 +31,17 @@ void ShowVector(std::vector<float> v)
 	}
 }
 
-std::vector<classes::Position> PositionInsideCircle(classes::Position center, float radius, size_t numberPoints = 120) 
+std::vector<classes::Position> Sections(float radius, int sectionId, size_t numberPoints = 15)
 {
 	float theta;
 	std::vector<classes::Position> positions;
 
-	for (size_t i = 0; i < numberPoints; i++)
+	for (size_t i = 0; i <= numberPoints; i++)
 	{
-		theta = (float)i * 3.14159 / 180; // radians
-		float x = center.x + cos(theta);
-		float y = center.y + sin(theta);
-		float z = 5;
+		theta = (float)i * 0.25 * 3.14159 / 180; // radians for quarter cirlce
+		float x = sectionId;
+		float z = i * radius / numberPoints;
+		float y = z * (1 - cos(theta)) * 500;
 
 		positions.push_back(classes::Position(x, y, z));
 	}
@@ -89,18 +90,37 @@ void Arrays()
 	ShowVector(floatvector);
 }
 
+std::string GetSectionsString(const std::vector<classes::Position>& section, int index)
+{
+	std::string header = "#Section " + std::to_string(index) + "\n";
+
+	std::string sectionString;
+
+	for (size_t i = 0; i < section.size(); i++)
+	{
+		sectionString += section[i].ToString() + "\n";
+	}
+
+	return header + sectionString;
+}
+
+
 int main()
 {
-	// create posVec and write it to a file
-	//posVec = PositionInsideCircle(classes::Position(0, 0, 0), 4);
-	//
-	//std::string positionsString;
-	//for (size_t i = 0; i < posVec.size(); i++)
-	//{
-	//	positionsString += posVec[i].ToString() + "\n";
-	//}
-	//
-	//Files::WriteFile("Positions.txt", positionsString);
+	int sections = 25;
+	std::string sectionString;
+	size_t pointsPerSection = 15;
+
+	for (size_t i = 0; i < sections; i++)
+	{
+		int index = i + 1;
+		posVec = Sections(15, index, pointsPerSection);
+
+		sectionString += GetSectionsString(posVec, index);
+	}
+	//create posVec and write it to a file
+
+	Files::WriteFile("Sections.txt", sectionString);
 
 	// read posVec from file
 	//Files::ReadPositionArrayFromFile("Positions.txt", posVec);
@@ -111,24 +131,49 @@ int main()
 	// the derived classes may not have the same size as Base
 	// but pointers to Base will have the same size as pointers
 	// to derived classes
-	std::vector<classes::Base*> v;
-	for (size_t i = 0; i < 10; i++)
+	//std::vector<classes::Base*> v;
+	//for (size_t i = 0; i < 10; i++)
+	//{
+	//	if (i % 2 == 0)
+	//	{
+	//		v.push_back(new classes::Derived());
+	//	}
+	//	else
+	//	{
+	//		v.push_back(new classes::Derived2());
+	//	}
+	//}
+	//
+	//for (size_t i = 0; i < 10; i++)
+	//{
+	//	v[i]->F();
+	//}
+	//
+	//
+	//std::cout << classes::Base::GetCount();
+
+	// get specific section from file
+	int sectionId = 4;
+
+	std::vector<classes::Position> section;
+	Files::ReadAllSectionsFromFile("Sections.txt", section);
+	std::vector<float> areas;
+	for (size_t i = 0; i < section.size(); i += pointsPerSection + 1)
 	{
-		if (i % 2 == 0)
-		{
-			v.push_back(new classes::Derived());
-		}
-		else
-		{
-			v.push_back(new classes::Derived2());
-		}
+		std::vector<classes::Position>::const_iterator firstElement = section.begin() + i;
+		std::vector<classes::Position>::const_iterator lastElement = firstElement + pointsPerSection;
+		std::vector<classes::Position> currentSection(firstElement, lastElement);
+
+		areas.push_back(SectionMath::SectionArea(currentSection));
 	}
 
-	for (size_t i = 0; i < 10; i++)
-	{
-		v[i]->F();
-	}
-
-	std::cout << classes::Base::GetCount();
+	std::cout << SectionMath::Volume(areas, 1) << " m3\n";
+	//
+	//for (size_t i = 0; i < section.size(); i++)
+	//{
+	//	sectionString += section[i].ToString() + "\n";
+	//}
+	//
+	//std::cout << sectionString;
 }
 

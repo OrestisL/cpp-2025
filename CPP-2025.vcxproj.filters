@@ -24,6 +24,9 @@
     <ClInclude Include="headers\Files.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="headers\SectionMath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
